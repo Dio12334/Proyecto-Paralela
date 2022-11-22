@@ -5,19 +5,22 @@
 #include <vector>
 #include "Parser.h"
 
+const int INF = 2e9;
+
 class Graph{
 
     private:
     typedef std::vector<std::vector<float>>  DistMatrix;
     std::vector<Point> points;
     DistMatrix adj;
+    size_t size;
 
     
     public:
     Graph() = default;
 
     Graph(std::vector<Point> points_): points(points_), adj(points.size(), std::vector<float>(points.size(),0)){
-        
+        size = points.size();
         for(size_t u = 0;u < points.size(); u++){
             for(size_t v = 0; v < points.size(); v++){
                 adj[u][v] = adj[v][u] = Point::dist(points[u] , points[v]);
@@ -26,6 +29,7 @@ class Graph{
     }
 
     std::vector<Point> ShortestPath();
+    void dfs(int*, int);
       
 };
 
