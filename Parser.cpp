@@ -34,5 +34,4 @@ std::optional<std::vector<Point>> Parse(std::string fileName){
         std::cerr << "File " << path + fileName << " not found\n";
         return {};
     }
-
 }

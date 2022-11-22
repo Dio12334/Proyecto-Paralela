@@ -2,15 +2,19 @@
 #include <omp.h>
 #include <iostream>
 #include "Parser.h"
+#include "graph.hpp"
 
+std::vector<Point> Graph::ShortestPath(){
 
-int main(int argc, char* argv[]){
+    return {};
+}
+
+int main(){
     auto ifPoints = Parse("xqf131.tsp");
     if(ifPoints){
         auto points = ifPoints.value();
-        for(auto point: points){
-            std::cout << point.x << " " << point.y << " " << point.z << "\n";
-        }
+        std::cout<< points.size()<<'\n';
+        Graph g(points);
     }
     return 0;
 }
