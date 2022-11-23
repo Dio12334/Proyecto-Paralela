@@ -43,7 +43,7 @@ class Graph{
     }
 
     std::vector<Point> ShortestPath();
-    void dfs(Tour&, int, float);
+    void dfs(Tour&, int, float, int);
       
 };
 
