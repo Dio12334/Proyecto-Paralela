@@ -3,7 +3,7 @@ CODEDIRS= .# where are the .c/.cpp?
 INCDIRS= .# where are the .h/.hpp?
 
 
-LINKERFLAGS = -fopenmp
+LINKERFLAGS = 
 CC=g++
 OPT=-O2
 # generate files that encode make rules for the .h dependencies

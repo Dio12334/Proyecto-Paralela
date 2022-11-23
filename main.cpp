@@ -14,6 +14,16 @@ void Graph::dfs(Tour &tour, int vertex, float cost_in, int depth = 0){
 
     // Bound
     if(BestCost < cost_in) return;
+    
+    //when a path is completed then i can compared it to best path
+    if(tour.path.size() == this->points.size() && cost_in < BestCost ){
+        // printf("%f, %f\n", cost_in, BestTour.cost);
+        #pragma omp critical
+        {
+            BestTour = tour;
+            BestCost = cost_in;
+        }
+    }
 
     for(size_t i = 0; i < size; i++ ){
         if(tour.visited[i]) continue;
@@ -22,7 +32,7 @@ void Graph::dfs(Tour &tour, int vertex, float cost_in, int depth = 0){
         tour.visited[i] = 1;
 
         if(depth == 0){
-            dfs(tour, i, cost_in + adj[vertex][i]);
+            dfs(tour, i, cost_in + adj[vertex][i], depth + 1);
         }
         else{
             #pragma omp task default(none) shared(BestTour, BestCost) firstprivate(i,tour,vertex,depth, cost_in)
@@ -30,15 +40,7 @@ void Graph::dfs(Tour &tour, int vertex, float cost_in, int depth = 0){
                 dfs(tour, i, cost_in + adj[vertex][i], depth+1);
             }
         }
-        //when a path is completed then i can compared it to best path
-        if(tour.path.size() == this->points.size() && cost_in < BestCost ){
-            // printf("%f, %f\n", cost_in, BestTour.cost);
-            #pragma omp critical
-            {
-                BestTour = tour;
-                BestCost = cost_in;
-            }
-        }
+
         tour.path.pop();
         tour.visited[i] = 0;
     }
