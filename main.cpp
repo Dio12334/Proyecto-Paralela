@@ -16,12 +16,18 @@ void Graph::dfs(Tour &tour, int vertex, float cost_in, int depth = 0){
     if(BestCost < cost_in) return;
     
     //when a path is completed then i can compared it to best path
-    if(tour.path.size() == this->points.size() && cost_in < BestCost ){
-        // printf("%f, %f\n", cost_in, BestTour.cost);
-        #pragma omp critical
-        {
-            BestTour = tour;
-            BestCost = cost_in;
+    if(tour.path.size() == this->points.size() ){
+        tour.path.push(0);
+        for(size_t i = 0; i < size; i++ ){
+            // connection back to root
+            if(cost_in + adj[0][vertex] < BestCost){
+                #pragma omp critical
+                {
+                    BestTour = tour;
+                    BestCost = cost_in;
+                }
+            }
+            
         }
     }
 
@@ -31,7 +37,7 @@ void Graph::dfs(Tour &tour, int vertex, float cost_in, int depth = 0){
         tour.path.push(i);
         tour.visited[i] = 1;
 
-        if(depth == 0){
+        if(depth != 0){
             dfs(tour, i, cost_in + adj[vertex][i], depth + 1);
         }
         else{
