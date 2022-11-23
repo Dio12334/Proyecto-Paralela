@@ -5,7 +5,17 @@
 #include <vector>
 #include "Parser.h"
 
+
+#define N 20
+
 const int INF = 2e9;
+
+struct Tour{
+    std::stack<int> path;    
+    bool visited[N] = {};
+    float cost = INF;
+};
+
 
 class Graph{
 
@@ -29,7 +39,7 @@ class Graph{
     }
 
     std::vector<Point> ShortestPath();
-    void dfs(int*, int);
+    void dfs(Tour&, int, float);
       
 };
 
