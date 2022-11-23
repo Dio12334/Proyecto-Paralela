@@ -4,43 +4,53 @@
 #include "Parser.h"
 #include "graph.hpp"
 
-#include <stack>
-#include <deque>
 
 
 
 Tour BestTour;
+float BestCost;
 
-void Graph::dfs(Tour &tour, int vertex = 0, float cost_in){
+void Graph::dfs(Tour &tour, int vertex, float cost_in){
     // Bound
-    if(BestTour.cost <= cost_in) return;
 
-    tour.path.push(vertex);
-    for(int i = 0; i < size; i++ ){
+    if(BestCost < cost_in) return;
+
+    for(size_t i = 0; i < size; i++ ){
         if(tour.visited[i]) continue;
+
+        tour.path.push(i);
         tour.visited[i] = 1;
 
-        for(int j = 0; j<size;j++){
-            if(tour.visited[j]) continue;    
-
-            dfs(tour, j, cost_in + adj[i][j]);
-            //when a path is completed then i can compared it to best path
-            if(tour.path.size() == this->points.size()){
-                BestTour = tour;
-            }
-            tour.path.pop(); //BackTracking
+        dfs(tour, i, cost_in + adj[vertex][i]);
+        //when a path is completed then i can compared it to best path
+        if(tour.path.size() == this->points.size() && cost_in < BestCost ){
+            // printf("%f, %f\n", cost_in, BestTour.cost);
+            BestTour = tour;
+            BestCost = cost_in;
         }
-
+        tour.path.pop();
+        tour.visited[i] = 0;
     }
+
 }
 
 std::vector<Point> Graph::ShortestPath(){
 
     Tour t;
     BestTour = Tour();
+    BestCost = INF;
     // TODO:
     // Search for lower bound with mst?
-    dfs(t, 0, INF);
+    t.path.push(0);
+    t.visited[0] = 1;
+    dfs(t, 0, 0);
+
+    auto st = BestTour.path;
+    while(!st.empty()) {
+        std::cout << st.top()<<" ";
+        st.pop();
+    }
+
     
     return {};
 }
@@ -51,6 +61,8 @@ int main(){
         auto points = ifPoints.value();
         std::cout<< points.size()<<'\n';
         Graph g(points);
+
+        g.ShortestPath();
     }
     return 0;
 }

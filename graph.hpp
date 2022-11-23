@@ -3,6 +3,9 @@
 
 
 #include <vector>
+#include <stack>
+#include <deque>
+
 #include "Parser.h"
 
 
@@ -13,7 +16,7 @@ const int INF = 2e9;
 struct Tour{
     std::stack<int> path;    
     bool visited[N] = {};
-    float cost = INF;
+    float cost = 0;
 };
 
 
@@ -34,6 +37,7 @@ class Graph{
         for(size_t u = 0;u < points.size(); u++){
             for(size_t v = 0; v < points.size(); v++){
                 adj[u][v] = adj[v][u] = Point::dist(points[u] , points[v]);
+                // printf("%d, %d, %f\n", u, v, adj[u][v]);
             }
         }
     }
