@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Parser.h"
 #include "graph.hpp"
-
+#include "Display.h"
 
 
 
@@ -58,6 +58,7 @@ std::vector<Point> Graph::ShortestPath(){
     Tour t;
     BestTour = Tour();
     BestCost = INF;
+    std::vector<Point> result;
     // TODO:
     // Search for lower bound with mst?
     t.path.push(0);
@@ -67,11 +68,12 @@ std::vector<Point> Graph::ShortestPath(){
     auto st = BestTour.path;
     while(!st.empty()) {
         std::cout << st.top()<<" ";
+        result.push_back(points[st.top()]);
         st.pop();
     }
 
     
-    return {};
+    return result;
 }
 
 int main(){
@@ -80,8 +82,9 @@ int main(){
         auto points = ifPoints.value();
         std::cout<< points.size()<<'\n';
         Graph g(points);
-
-        g.ShortestPath();
+        
+        Display display(g.ShortestPath());
+        display.run();
     }
     return 0;
 }

@@ -21,7 +21,7 @@ std::optional<std::vector<Point>> Parse(std::string fileName){
             
             std::istringstream record(line);
             Point point;
-            record >> point.x >> point.y >> point.z;
+            record >> point.z >> point.x >> point.y;
             points.push_back(point);
         }
 
