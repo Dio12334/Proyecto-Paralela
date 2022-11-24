@@ -4,7 +4,7 @@
 #include <sstream>
 #include <unistd.h>
 
-std::optional<std::vector<Point>> Parse(std::string fileName){
+std::optional<std::vector<Point>> Parse(std::string fileName, bool verbose){
     std::string path = "./DataSets/";
     std::fstream file(path + fileName);
 
@@ -27,11 +27,12 @@ std::optional<std::vector<Point>> Parse(std::string fileName){
 
         file.close();
         points.pop_back();
-        std::clog << "File " << path + fileName << " read successfully\n";
+
+        if(verbose) std::clog << "File " << path + fileName << " read successfully\n";
         return points;
     }
     else{
-        std::cerr << "File " << path + fileName << " not found\n";
+        if(verbose) std::cerr << "File " << path + fileName << " not found\n";
         return {};
     }
 }

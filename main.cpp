@@ -3,12 +3,14 @@
 #include <iostream>
 #include "Parser.h"
 #include "graph.hpp"
-#include "Display.h"
+#include "timer.hpp"
 
 
 
 Tour BestTour;
 float BestCost;
+int thread_num = 16;
+int curthreads = 0;
 
 void Graph::dfs(Tour &tour, int vertex, float cost_in, int depth = 0){
 
@@ -63,11 +65,16 @@ std::vector<Point> Graph::ShortestPath(){
     // Search for lower bound with mst?
     t.path.push(0);
     t.visited[0] = 1;
-    dfs(t, 0, 0);
 
+    #pragma omp parallel default(none) shared(BestTour, BestCost) firstprivate(t) num_threads(16)
+    {
+        #pragma omp single
+        dfs(t, 0, 0);
+        #pragma omp taskwait
+    }
     auto st = BestTour.path;
     while(!st.empty()) {
-        std::cout << st.top()<<" ";
+        // std::cout << st.top()<<" ";
         result.push_back(points[st.top()]);
         st.pop();
     }
@@ -76,15 +83,27 @@ std::vector<Point> Graph::ShortestPath(){
     return result;
 }
 
-int main(){
-    auto ifPoints = Parse("xqf131.tsp");
+int main(int argc, char** argv){
+    std::string filename;
+
+    if(argc < 2) exit(-1);
+
+    filename = argv[1];   
+    thread_num = std::stoi(argv[2]);
+    
+    std::cout<<filename<<" " <<thread_num<<'\n';   
+
+    auto ifPoints = Parse(filename);
     if(ifPoints){
         auto points = ifPoints.value();
-        std::cout<< points.size()<<'\n';
+        std::cout<< "Points:"<< points.size()<<'\n';
         Graph g(points);
+        {  
+            Timer t("");            
+            g.ShortestPath();
+        }
+
         
-        Display display(g.ShortestPath());
-        display.run();
     }
     return 0;
 }

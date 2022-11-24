@@ -15,6 +15,6 @@ struct Point{
                 (p1.z - p2.z) *  (p1.z - p2.z) );
     }
 };
-std::optional<std::vector<Point>> Parse(std::string fileName);
+std::optional<std::vector<Point>> Parse(std::string fileName, bool verbose = false);
 
 #endif
