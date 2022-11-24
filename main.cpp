@@ -83,15 +83,10 @@ std::vector<Point> Graph::ShortestPath(){
     return result;
 }
 
-int main(int argc, char** argv){
+int main(){
     std::string filename;
-
-    if(argc < 2) exit(-1);
-
-    filename = argv[1];   
-    thread_num = std::stoi(argv[2]);
     
-    std::cout<<filename<<" " <<thread_num<<'\n';   
+    std::cin>>filename>>thread_num;
 
     auto ifPoints = Parse(filename);
     if(ifPoints){
