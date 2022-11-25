@@ -17,26 +17,21 @@ omp_lock_t writelock;
 void Graph::dfs(Tour &tour, int vertex, float cost_in, int depth = 0){
 
     // Bound
-    omp_set_lock(&writelock);
-    bool redundant = BestCost < cost_in;
-    omp_unset_lock(&writelock);
+    if(BestCost < cost_in) return;
 
-    
-    if(redundant) return;
-    
     //when a path is completed then i can compared it to best path
-    if(tour.path.size() == this->points.size() ){
+    if(depth == this->points.size() - 1){
         tour.path.push(0);
-        // connection back to root
-        omp_set_lock(&writelock);
+
         if(cost_in + adj[0][vertex] < BestCost){
             #pragma omp critical
             {
-                BestTour = tour;
-                BestCost = cost_in;
+                    BestTour = tour;
+                    BestCost = cost_in;
             }
         }
-        omp_unset_lock(&writelock);
+        tour.path.pop();
+        return;
     }
 
     for(size_t i = 0; i < size; i++ ){
@@ -61,6 +56,7 @@ void Graph::dfs(Tour &tour, int vertex, float cost_in, int depth = 0){
 
 }
 
+
 std::vector<Point> Graph::ShortestPath(){
 
     Tour t;
@@ -72,14 +68,14 @@ std::vector<Point> Graph::ShortestPath(){
     // Search for lower bound with mst?
     t.path.push(0);
     t.visited[0] = 1;
-    omp_init_lock(&writelock);
+    // omp_init_lock(&writelock);
     #pragma omp parallel default(none) shared(BestTour, BestCost) firstprivate(t) num_threads(thread_num)
     {
         #pragma omp single
         dfs(t, 0, 0);
         #pragma omp taskwait
     }
-    omp_destroy_lock(&writelock);
+    // omp_destroy_lock(&writelock);
 
     auto st = BestTour.path;
     while(!st.empty()) {
@@ -94,7 +90,7 @@ int main(){
     std::string filename;
     
     std::cin>>filename>>thread_num;
-
+    
     auto ifPoints = Parse(filename);
     if(ifPoints){
         auto points = ifPoints.value();
@@ -114,10 +110,8 @@ int main(){
         std::cout<<"res size:"<< res.size()<<'\n';
         std::cout<<"cost:"<< cost<<'\n';
 
-        // Display display(res);
-        // display.run();
-
-        
+        Display display(res);
+        display.run();
     }
     return 0;
 }
