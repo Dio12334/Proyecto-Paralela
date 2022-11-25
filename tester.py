@@ -5,16 +5,16 @@ iterations = 4
 program_path = "./a.out "
 
 def parse_result(response: str):
-    nano_idx, mil_idx = 1 , 3
+    mil_idx = 1
     return response.split()[mil_idx]
     
-
 data_files = glob("./DataSets/*")
 
 for file in data_files:
 
   file_name = file.split("/")[-1]
-  print("OMP, n:",file_name)
+  file_size = file_name[3:-4]
+  print("OMP, n:",file_size)
   print("   processors", "  |\t","average(miliseconds)")
   print("-------------------------------------")
   for pr_i in [10, 16, 20, 24, 32]:
