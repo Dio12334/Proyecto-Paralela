@@ -12,7 +12,7 @@ bool Display::Init(){
         SDL_Log("No se pudo inicializar SDL: %s", SDL_GetError());
         return false;
     }
-    m_Window = SDL_CreateWindow("TSP", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 300, 300,0);
+    m_Window = SDL_CreateWindow("TSP", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 600,0);
     if(!m_Window){
         SDL_Log("Falla en la creación de la ventana: %s", SDL_GetError());
         return false;
