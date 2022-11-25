@@ -5,12 +5,12 @@
 #include "graph.hpp"
 #include "timer.hpp"
 
+#include "Display.h"
 
 
 Tour BestTour;
 float BestCost;
 int thread_num = 16;
-int curthreads = 0;
 
 void Graph::dfs(Tour &tour, int vertex, float cost_in, int depth = 0){
 
@@ -20,16 +20,13 @@ void Graph::dfs(Tour &tour, int vertex, float cost_in, int depth = 0){
     //when a path is completed then i can compared it to best path
     if(tour.path.size() == this->points.size() ){
         tour.path.push(0);
-        for(size_t i = 0; i < size; i++ ){
-            // connection back to root
-            if(cost_in + adj[0][vertex] < BestCost){
-                #pragma omp critical
-                {
-                    BestTour = tour;
-                    BestCost = cost_in;
-                }
+        // connection back to root
+        if(cost_in + adj[0][vertex] < BestCost){
+            #pragma omp critical
+            {
+                BestTour = tour;
+                BestCost = cost_in;
             }
-            
         }
     }
 
@@ -65,8 +62,7 @@ std::vector<Point> Graph::ShortestPath(){
     // Search for lower bound with mst?
     t.path.push(0);
     t.visited[0] = 1;
-
-    #pragma omp parallel default(none) shared(BestTour, BestCost) firstprivate(t) num_threads(16)
+    #pragma omp parallel default(none) shared(BestTour, BestCost) firstprivate(t) num_threads(thread_num)
     {
         #pragma omp single
         dfs(t, 0, 0);
@@ -74,12 +70,10 @@ std::vector<Point> Graph::ShortestPath(){
     }
     auto st = BestTour.path;
     while(!st.empty()) {
-        // std::cout << st.top()<<" ";
+        std::cout << st.top()<<" ";
         result.push_back(points[st.top()]);
         st.pop();
     }
-
-    
     return result;
 }
 
@@ -92,11 +86,23 @@ int main(){
     if(ifPoints){
         auto points = ifPoints.value();
         std::cout<< "Points:"<< points.size()<<'\n';
+        std::vector<Point> res;
         Graph g(points);
         {  
             Timer t("");            
-            g.ShortestPath();
+            res = g.ShortestPath();
         }
+
+        float cost = 0;
+        for(int i = 0; i < res.size() - 1; i++ ){
+            cost +=  Point::dist( res[i] , res[i+1]);   
+        }
+
+        std::cout<<"res size:"<< res.size()<<'\n';
+        std::cout<<"cost:"<< cost<<'\n';
+
+        Display display(res);
+        display.run();
 
         
     }

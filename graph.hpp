@@ -9,7 +9,7 @@
 #include "Parser.h"
 
 
-#define N 20
+#define N 40
 
 const int INF = 2e9;
 
@@ -44,6 +44,8 @@ class Graph{
 
     std::vector<Point> ShortestPath();
     void dfs(Tour&, int, float, int);
+
+    const DistMatrix& get_adj() const{return adj;}
       
 };
 
