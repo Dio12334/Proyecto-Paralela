@@ -1,6 +1,6 @@
-BINARY=a.out # name of the binary
-CODEDIRS= .# where are the .c/.cpp?
-INCDIRS= .# where are the .h/.hpp?
+BINARY=tsp.out # name of the binary
+CODEDIRS= . Graph Display Timer# where are the .c/.cpp?
+INCDIRS= . Graph Display Timer# where are the .h/.hpp?
 
 
 LINKERFLAGS = -lSDL2
@@ -12,7 +12,7 @@ DEPFLAGS=-MP -MD
 CFLAGS=-Wall -Wextra -g $(foreach D,$(INCDIRS),-I$(D)) $(OPT) $(DEPFLAGS) -std=c++17 
 
 # for-style iteration (foreach) and regular expression completions (wildcard)
-CFILES=$(foreach D,$(CODEDIRS),$(wildcard $(D)/*.cpp)) Display/display.cpp Graph/point.cpp Graph/graph.cpp
+CFILES=$(foreach D,$(CODEDIRS),$(wildcard $(D)/*.cpp))
 # regular expression replacement
 OBJECTS=$(patsubst %.cpp,%.o,$(CFILES))
 DEPFILES=$(patsubst %.cpp,%.d,$(CFILES))

@@ -112,6 +112,8 @@ void Graph::solveTSP(std::string filename, const int th){
     std::cout<<"\nCOST (calc from the shortest path): "<< cost;
     std::cout<<"\nTSP-COST (calc from actual TSP algorithm): " << BestCost << '\n';
 
+    /*
     Display display(res);
     display.run();
+    */
 }

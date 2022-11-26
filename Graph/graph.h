@@ -3,7 +3,7 @@
 
 #include "point.h"
 #include "tour.h"
-#include "timer.hpp"
+#include "../Timer/timer.h"
 #include "Display/display.h"
 #include <vector>
 

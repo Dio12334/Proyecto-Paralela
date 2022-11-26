@@ -1,31 +1,28 @@
 from subprocess import Popen, PIPE
 from glob import glob
 
+output_offset = 4
 iterations = 4
-program_path = "./a.out "
 
-def parse_result(response: str):
-    mil_idx = 1
-    return response.split()[mil_idx]
+program_path = "./tsp.out"
+output_path = "runtimes.txt"
     
-data_files = glob("./DataSets/*")
+data_files = sorted(glob("./DataSets/*"))
 
-for file in data_files:
-
-  file_name = file.split("/")[-1]
-  file_size = file_name[3:-4]
-  print("OMP, n:",file_size)
-  print("   processors", "  |\t","average(miliseconds)")
-  print("-------------------------------------")
-  for pr_i in [10, 16, 20, 24, 32]:
-    avg = 0
-    for i in range(iterations):
-      p = Popen([program_path], shell=True, stdout=PIPE, stdin=PIPE)
-      p.stdin.write(f"{file_name} {pr_i}\n".encode())
-      p.stdin.flush()
-      result = p.stdout.readline().strip().decode()
-      result = p.stdout.readline().strip().decode()
-      avg += float(parse_result(result))
-    avg = avg / iterations
-    print("\t",pr_i, "\t|  ",f'{avg:.20f}')
-
+with open(output_path, "w") as runtimes:
+  for file in data_files:
+    file_name = file.split("/")[-1]
+    file_size = file_name[3:-4]
+    runtimes.write(f"file: {file_name}, N = {file_size}\n")
+    for pr_i in [1]:
+      avg = 0
+      runtimes.write(f"{pr_i} ")
+      for i in range(iterations):
+        p = Popen([program_path], shell=True, stdout=PIPE, stdin=PIPE)
+        p.stdin.write(f"{file_name} {pr_i}\n".encode())
+        p.stdin.flush()
+        for _ in range(output_offset):
+          result = p.stdout.readline().strip().decode()
+        avg += float(result.split(" ")[-2])
+      avg = avg / iterations
+      runtimes.write(f"{avg:.7f}\n")
