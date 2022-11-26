@@ -3,7 +3,7 @@ CODEDIRS= .# where are the .c/.cpp?
 INCDIRS= .# where are the .h/.hpp?
 
 
-LINKERFLAGS = -fopenmp
+LINKERFLAGS = -lSDL2
 CC=g++
 OPT=-O2
 # generate files that encode make rules for the .h dependencies
@@ -12,7 +12,7 @@ DEPFLAGS=-MP -MD
 CFLAGS=-Wall -Wextra -g $(foreach D,$(INCDIRS),-I$(D)) $(OPT) $(DEPFLAGS) -std=c++17 
 
 # for-style iteration (foreach) and regular expression completions (wildcard)
-CFILES=$(foreach D,$(CODEDIRS),$(wildcard $(D)/*.cpp))
+CFILES=$(foreach D,$(CODEDIRS),$(wildcard $(D)/*.cpp)) Display/display.cpp Graph/point.cpp Graph/graph.cpp
 # regular expression replacement
 OBJECTS=$(patsubst %.cpp,%.o,$(CFILES))
 DEPFILES=$(patsubst %.cpp,%.d,$(CFILES))

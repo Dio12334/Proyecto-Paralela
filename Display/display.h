@@ -1,8 +1,8 @@
 #pragma once
 
-#include <SDL2/SDL.h>
+#include "../Graph/point.h"
+#include <../SDL2/SDL.h>
 #include <vector>
-#include "Parser.h"
 
 class Display{
     public:

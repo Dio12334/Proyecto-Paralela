@@ -1,20 +1,17 @@
-#include "Display.h"
+#include "display.h"
 #include <iostream>
 
-Display::Display(std::vector <Point> points): m_Points(points){
-    std::cout << "number of points: " << m_Points.size() << std::endl;
-}
+Display::Display(std::vector <Point> points): m_Points(points){}
 
 bool Display::Init(){
- 
     int sdlResult = SDL_Init(SDL_INIT_VIDEO);
     if(sdlResult != 0){
-        SDL_Log("No se pudo inicializar SDL: %s", SDL_GetError());
+        SDL_Log("\n[ERR] No se pudo inicializar SDL: %s", SDL_GetError());
         return false;
     }
     m_Window = SDL_CreateWindow("TSP", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 600,0);
     if(!m_Window){
-        SDL_Log("Falla en la creación de la ventana: %s", SDL_GetError());
+        SDL_Log("\n[ERR] Falla en la creación de la ventana: %s", SDL_GetError());
         return false;
     }
     m_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -24,7 +21,6 @@ bool Display::Init(){
 }
 
 void Display::Runloop(){
-
     while(m_IsRunning){
         ProcessInput();
         GenerateOutput();
@@ -39,12 +35,10 @@ void Display::Shutdown(){
 void Display::run(){
     if(Init())
         Runloop();
-
     Shutdown();
 }
         
 void Display::ProcessInput(){
-
     SDL_Event event;
     while(SDL_PollEvent(&event)){
         switch(event.type){
@@ -56,7 +50,6 @@ void Display::ProcessInput(){
 }
 
 void Display::GenerateOutput(){
-
     SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
     SDL_RenderClear(m_Renderer);
 
