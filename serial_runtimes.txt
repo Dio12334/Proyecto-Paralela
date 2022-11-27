@@ -1,0 +1,16 @@
+file: map10.tsp, N = 10
+0.0070130
+file: map11.tsp, N = 11
+0.0195608
+file: map12.tsp, N = 12
+0.0507750
+file: map13.tsp, N = 13
+0.1684250
+file: map14.tsp, N = 14
+0.8616910
+file: map15.tsp, N = 15
+3.7494650
+file: map16.tsp, N = 16
+18.1542750
+file: map17.tsp, N = 17
+104.1310000

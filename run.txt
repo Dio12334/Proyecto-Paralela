@@ -1,1 +1,1 @@
-map15.tsp 10
+map10.tsp 10

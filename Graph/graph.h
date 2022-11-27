@@ -4,7 +4,7 @@
 #include "point.h"
 #include "tour.h"
 #include "../Timer/timer.h"
-#include "Display/display.h"
+//#include "Display/display.h"
 #include <vector>
 
 #define INF 2e9;
