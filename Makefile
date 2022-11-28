@@ -1,9 +1,9 @@
 BINARY=tsp.out # name of the binary
-CODEDIRS= . Graph Timer# where are the .c/.cpp?
-INCDIRS= . Graph Timer# where are the .h/.hpp?
+CODEDIRS= . Graph Timer Display# where are the .c/.cpp?
+INCDIRS= . Graph Timer Display# where are the .h/.hpp?
 
 
-LINKERFLAGS = -fopenmp
+LINKERFLAGS = -lSDL2
 CC=g++
 OPT=-O2
 # generate files that encode make rules for the .h dependencies
